@@ -1,0 +1,133 @@
+import unittest
+import shape_calculator
+
+# Create a test suite by defining a new class that inherits from unittest.TestCase
+class UnitTests(unittest.TestCase):
+    # The setUp method runs before each test case, setting up common objects to be used in tests
+    def setUp(self):
+        # Create a Rectangle object with width 3 and height 6
+        self.rect = shape_calculator.Rectangle(3, 6)
+        # Create a Square object with side length 5
+        self.sq = shape_calculator.Square(5)
+
+    # Test case to check if Square is a subclass of Rectangle
+    def test_subclass(self):
+        actual = issubclass(shape_calculator.Square, shape_calculator.Rectangle)
+        expected = True
+        self.assertEqual(actual, expected, 'Expected Square class to be a subclass of the Rectangle class.')
+
+    # Test case to check if Square is a distinct class from Rectangle
+    def test_distinct_classes(self):
+        actual = shape_calculator.Square is not shape_calculator.Rectangle
+        expected = True
+        self.assertEqual(actual, expected, 'Expected Square class to be a distinct class from the Rectangle class.')
+
+    # Test case to check if Square object is an instance of Square and Rectangle classes
+    def test_square_is_square_and_rectangle(self):
+        actual = isinstance(self.sq, shape_calculator.Square) and isinstance(self.sq, shape_calculator.Rectangle)
+        expected = True
+        self.assertEqual(actual, expected, 'Expected square object to be an instance of the Square class and the Rectangle class.')
+
+    # Test case to check the string representation of a Rectangle object
+    def test_rectangle_string(self):
+        actual = str(self.rect)
+        expected = "Rectangle(width=3, height=6)"
+        self.assertEqual(actual, expected, 'Expected string representation of rectangle to be "Rectangle(width=3, height=6)"')
+
+    # Test case to check the string representation of a Square object
+    def test_square_string(self):
+        actual = str(self.sq)
+        expected = "Square(side=5)"
+        self.assertEqual(actual, expected, 'Expected string representation of square to be "Square(side=5)"')
+
+    # Test case to check the area calculation for Rectangle and Square
+    def test_area(self):
+        actual = self.rect.get_area()
+        expected = 18
+        self.assertEqual(actual, expected, 'Expected area of rectangle to be 18')
+        actual = self.sq.get_area()
+        expected = 25
+        self.assertEqual(actual, expected, 'Expected area of square to be 25')
+
+    # Test case to check the perimeter calculation for Rectangle and Square
+    def test_perimeter(self):
+        actual = self.rect.get_perimeter()
+        expected = 18
+        self.assertEqual(actual, expected, 'Expected perimeter of rectangle to be 18')
+        actual = self.sq.get_perimeter()
+        expected = 20
+        self.assertEqual(actual, expected, 'Expected perimeter of square to be 20')
+
+    # Test case to check the diagonal calculation for Rectangle and Square
+    def test_diagonal(self):
+        actual = self.rect.get_diagonal()
+        expected = 6.708203932499369
+        self.assertEqual(actual, expected, 'Expected diagonal of rectangle to be 6.708203932499369')
+        actual = self.sq.get_diagonal()
+        expected = 7.0710678118654755
+        self.assertEqual(actual, expected, 'Expected diagonal of square to be 7.0710678118654755')
+
+    # Test case to check setting attributes (width and height for Rectangle, side for Square)
+    def test_set_atributes(self):
+        self.rect.set_width(7)
+        self.rect.set_height(8)
+        self.sq.set_side(2)
+        actual = str(self.rect)
+        expected = "Rectangle(width=7, height=8)"
+        self.assertEqual(actual, expected, 'Expected string representation of rectangle after setting new values to be "Rectangle(width=7, height=8)"')
+        actual = str(self.sq)
+        expected = "Square(side=2)"
+        self.assertEqual(actual, expected, 'Expected string representation of square after setting new values to be "Square(side=2)"')
+        self.sq.set_width(4)
+        actual = str(self.sq)
+        expected = "Square(side=4)"
+        self.assertEqual(actual, expected, 'Expected string representation of square after setting width to be "Square(side=4)"')
+
+    # Test case to check the picture of a Rectangle
+    def test_rectangle_picture(self):
+        self.rect.set_width(7)
+        self.rect.set_height(3)
+        actual = self.rect.get_picture()
+        expected = "*******\n*******\n*******\n"
+        self.assertEqual(actual, expected, 'Expected rectangle picture to be different.')
+
+    # Test case to check the picture of a Square
+    def test_square_picture(self):
+        self.sq.set_side(2)
+        actual = self.sq.get_picture()
+        expected = "**\n**\n"
+        self.assertEqual(actual, expected, 'Expected square picture to be different.')
+
+    # Test case to check the message when trying to get a picture of a too big Rectangle
+    def test_big_picture(self):
+        self.rect.set_width(51)
+        self.rect.set_height(3)
+        actual = self.rect.get_picture()
+        expected = "Too big for picture."
+        self.assertEqual(actual, expected, 'Expected message: "Too big for picture."')
+
+    # Test case to check the amount of shapes that can fit inside a Rectangle
+    def test_get_amount_inside(self):
+        self.rect.set_height(10)
+        self.rect.set_width(15)
+        actual = self.rect.get_amount_inside(self.sq)
+        expected = 6
+        self.assertEqual(actual, expected, 'Expected `get_amount_inside` to return 6.')
+
+    # Test case to check the amount of shapes that can fit inside a Rectangle when it can only fit one
+    def test_get_amount_inside_two_rectangles(self):
+        rect2 = shape_calculator.Rectangle(4, 8)
+        actual = rect2.get_amount_inside(self.rect)
+        expected = 1
+        self.assertEqual(actual, expected, 'Expected `get_amount_inside` to return 1.')
+
+    # Test case to check the amount of shapes that can fit inside a Rectangle when it cannot fit any
+    def test_get_amount_inside_none(self):
+        rect2 = shape_calculator.Rectangle(2, 3)
+        actual = rect2.get_amount_inside(self.rect)
+        expected = 0
+        self.assertEqual(actual, expected, 'Expected `get_amount_inside` to return 0.')
+
+# If the script is run directly, execute the test suite
+if __name__ == "__main__":
+    unittest.main()
